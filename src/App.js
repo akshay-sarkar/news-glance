@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Header from './component/Header';
 import { withStyles } from '@material-ui/core/styles';
+import Header  from './component/Header';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  }
+});
 
 const style = theme => ({
   layout: {
@@ -21,16 +30,38 @@ class App extends Component {
   render() {
     const { classes } = this.props;
     return (
+      <MuiThemeProvider theme={theme}>
       <div className="App">
         <React.Fragment>
           {/* Reset.css */}
           <CssBaseline />
+
           <div className={classes.layout}>
-            <Header />
+            
+            
+            <BrowserRouter>
+              <div>
+                <Header />
+                {/* <Navigation /> */}
+                {/* <Route
+                  exact path={routes.SIGN_UP}
+                  component={SignUp}
+                /> */}
+
+                {/* <Route
+                  exact path={routes.LANDING}
+                  component={SignUp}
+                /> */}
+
+              </div>
+            </BrowserRouter>
+          
           </div>
+        
         </React.Fragment>
         
       </div>
+      </MuiThemeProvider>
     );
   }
 }
