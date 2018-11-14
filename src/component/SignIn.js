@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Dialog, Button, TextField } from '@material-ui/core';
 import { DialogTitle, DialogContentText, DialogContent, DialogActions } from '@material-ui/core';
@@ -15,13 +14,12 @@ const styles = theme => ({
     }
 });
 
-class SignUp extends Component {
+class SignIn extends Component {
 
     state = {
         open: false,
         email: '',
-        password: '',
-        confirmPassword: '',
+        password: ''
     };
 
     handleOpen = () => {
@@ -42,15 +40,17 @@ class SignUp extends Component {
         const { classes } = this.props;
         return (
             <div>                
-                <Button variant="outlined" size="small" onClick={this.handleOpen}>Sign up</Button>
+                <Button variant="outlined" size="small" onClick={this.handleOpen}>Sign In</Button>
+                
                 <Dialog
                     aria-labelledby="auth-modal-title"
                     open={this.state.open}
-                    onClose={this.handleClose} >
-                <DialogTitle id="form-dialog-title">Sign Up</DialogTitle>
+                    onClose={this.handleClose}>
+
+                <DialogTitle id="form-dialog-title">Sign In</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Signup to create customize news feed.
+                        Sign In to read personalized news.
                     </DialogContentText>
 
                     <form noValidate autoComplete="off">
@@ -61,13 +61,10 @@ class SignUp extends Component {
                             type="password" margin="normal" fullWidth
                             value={this.state.password} onChange={this.handleChange('password')} />
 
-                        <TextField required id="confirm-password-input" label="Password" className={classes.textField}
-                            type="password"   margin="normal"  fullWidth
-                            value={this.state.confirmPassword} onChange={this.handleChange('confirmPassword')}  />
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.props.onUserChange} color="primary"> Cancel </Button>
+                    <Button onClick={this.handleClose} color="primary"> Cancel </Button>
                     <Button onClick={this.handleClose} color="primary"> SignUp </Button>
                 </DialogActions>
                 </Dialog>
@@ -75,9 +72,6 @@ class SignUp extends Component {
         )
     }
 }
-SignUp.propTypes= {
-    onUserChange : PropTypes.func
-}
 
 
-export default withStyles(styles, { withTheme: true })(SignUp);
+export default withStyles(styles, { withTheme: true })(SignIn);

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
-import Header  from './component/Header';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Header from './component/Header';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
+/* Importing Context */
+import { AppProvider } from './constants/AppContext';
 
 const theme = createMuiTheme({
   typography: {
@@ -30,38 +31,39 @@ class App extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <MuiThemeProvider theme={theme}>
-      <div className="App">
-        <React.Fragment>
-          {/* Reset.css */}
-          <CssBaseline />
+      <AppProvider>
+        <MuiThemeProvider theme={theme}>
+          <div className="App">
+            <React.Fragment>
+              {/* Reset.css */}
+              <CssBaseline />
 
-          <div className={classes.layout}>
-            
-            
-            <BrowserRouter>
-              <div>
-                <Header />
-                {/* <Navigation /> */}
-                {/* <Route
-                  exact path={routes.SIGN_UP}
-                  component={SignUp}
-                /> */}
+              <div className={classes.layout}>
 
-                {/* <Route
-                  exact path={routes.LANDING}
-                  component={SignUp}
-                /> */}
+                <BrowserRouter>
+                  <div>
+                    <Header />
+                    {/* <Navigation /> */}
+                    {/* <Route
+                      exact path={routes.SIGN_UP}
+                      component={SignUp}
+                    /> */}
+
+                    {/* <Route
+                      exact path={routes.LANDING}
+                      component={SignUp}
+                    /> */}
+
+                  </div>
+                </BrowserRouter>
 
               </div>
-            </BrowserRouter>
-          
+
+            </React.Fragment>
+
           </div>
-        
-        </React.Fragment>
-        
-      </div>
-      </MuiThemeProvider>
+        </MuiThemeProvider>
+      </AppProvider>
     );
   }
 }
