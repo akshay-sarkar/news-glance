@@ -23,6 +23,7 @@ class App extends Component {
     return (
       <div className="App">
         <React.Fragment>
+          {/* Reset.css */}
           <CssBaseline />
           <div className={classes.layout}>
             <Header />

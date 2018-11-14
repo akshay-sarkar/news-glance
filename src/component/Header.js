@@ -41,6 +41,7 @@ class Header extends Component {
         <React.Fragment>
         <Toolbar className={classes.toolbarMain}>
           <Button size="small">Subscribe</Button>
+          
           <Typography
             component="h2"
             variant="h5"
@@ -49,15 +50,19 @@ class Header extends Component {
             noWrap
             className={classes.toolbarTitle}
           >
-            Blog
+            News Glance
           </Typography>
+        
           <IconButton>
             <SearchIcon/>
           </IconButton>
+          
           <Button variant="outlined" size="small">
             Sign up
           </Button>
+        
         </Toolbar>
+        
         <Toolbar variant="dense" className={classes.toolbarSecondary}>
           {sections.map(section => (
             <Typography color="inherit" noWrap key={section}>
