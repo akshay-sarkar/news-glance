@@ -4,10 +4,8 @@ const AppContext = React.createContext();
 
 class AppProvider  extends Component {
     state = {
-        userData : {
-          username: '',
-          user: null // <-- add this line
-        }      
+        age: 100,
+        userData : null      
     }
     render() {
         return (
@@ -15,6 +13,9 @@ class AppProvider  extends Component {
                 state: this.state,
                 growAYearOlder: () => this.setState({
                     age: this.state.age + 1
+                }),
+                updateUserData : (user) => this.setState({
+                    userData : user
                 })
             }}>
                 {this.props.children}

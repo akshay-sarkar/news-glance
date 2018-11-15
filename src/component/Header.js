@@ -8,9 +8,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 /* React Route Dom*/
 import SignUp from './SignUp';
-import SignIn from './SignIn';
+import Logout from './Logout';
 /* Importing Context */
 import { AppContext } from '../constants/AppContext';
+/* Authentication */
+import auth from './Authentication/firebase';
 
 const sections = [
   'Technology',
@@ -45,6 +47,20 @@ class Header extends Component {
     }
   }
 
+  componentDidMount() {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        //this.setState({user});
+        console.log(this.context);
+        this.context.updateUserData(user);
+        console.log('user is set state..');
+      }else{
+        this.context.updateUserData(null);
+        console.log('not authorized');
+      }
+    })
+  }
+
   render() {
 
     const { classes } = this.props;
@@ -71,7 +87,7 @@ class Header extends Component {
               <SearchIcon />
             </IconButton>
 
-            {context.state.userData.user ? <SignIn></SignIn> : <SignUp></SignUp>}
+            {context.state.userData ? <Logout></Logout> : <SignUp></SignUp>}
 
           </Toolbar>
 
@@ -88,8 +104,11 @@ class Header extends Component {
     )
   }
 }
+
 Header.propTypes = {
   classes: PropTypes.object.isRequired
 };
+
+Header.contextType = AppContext;
 
 export default withStyles(styles_header)(Header)

@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import 'firebase/auth';
+import "firebase/auth";
 
 const config = {
     apiKey: "AIzaSyBSQ0SchiukUFpEb4zp_85yBKxZ5rYDR2c",
@@ -10,10 +10,9 @@ const config = {
     messagingSenderId: "1025448345928"
 };
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(config);
-}
+firebase.initializeApp(config);
 
+const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
 
 export default auth;
