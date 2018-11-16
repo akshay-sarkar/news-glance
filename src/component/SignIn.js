@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles';
-import { Dialog, Button, TextField } from '@material-ui/core';
-import { DialogTitle, DialogContentText, DialogContent, DialogActions } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContentText, DialogContent, DialogActions } from '@material-ui/core';
 import auth from './Authentication/firebase';
-
 
 const styles = theme => ({
     container: {
@@ -18,26 +16,24 @@ const styles = theme => ({
 });
 
 const INITIAL_STATE = {
-    email: '',
-    password: '',
-    confirmPassword: '',
+    email: 'akshay.sarkar.dbit@gmail.com',
+    password: 'akshays',
     error: null,
     success: null
 };
 
-
-class SignUp extends Component {
+class SignIn extends Component {
 
     constructor(props) {
         super(props);
         this.state = { open: false, ...INITIAL_STATE };
-        this.signup = this.signup.bind(this);
+        this.signin = this.signin.bind(this);
     }
 
     handleOpen = () => {
         this.setState({ open: true });
     };
-
+    
     handleClose = () => {
         this.setState({ open: false });
     };
@@ -48,62 +44,48 @@ class SignUp extends Component {
         });
     };
 
-    sendEmail = authUser =>{
-        this.setState({ 'success': 'An email is sent for verification.' });
-        authUser.user.sendEmailVerification().then(function () {
-            console.log("email verification sent to user");
-        }).catch(error => {
-            console.log('failure');
-            this.setState({ 'error': error });
-        });
-    };
-
-    signup(event){
+    signin = event => {
         const {
             email,
             password,
         } = this.state;
 
-            auth.createUserWithEmailAndPassword(email, password).then( authUser => {
-                console.log('sucess', authUser);
-                this.setState({ ...INITIAL_STATE });
-                if (authUser && authUser.user.emailVerified === false) {
-                    this.sendEmail(authUser);
-                }
-            })
-            .catch(error => {
-                console.log('faliure');
-                this.setState({ 'error': error });
-            });
+        auth.signInWithEmailAndPassword(email, password).then( authUser => {
+            console.log('sucess', authUser);
+            this.setState({ ...INITIAL_STATE });
+        })
+        .catch(error => {
+            console.log('faliure');
+            this.setState({ 'error': error });
+        });
 
         event.preventDefault();
-    }
+    };
 
     render() {
-        const { classes } = this.props;
 
+        const { classes } = this.props;
         const {
             email,
             password,
-            confirmPassword,
             error,
             success
         } = this.state;
 
-        const isInvalid = password !== confirmPassword || password === '' || email === '';
+        const isInvalid = password === '' || email === '';
 
         return (
             <React.Fragment>
-                <Button size="small" onClick={this.handleOpen}>Sign up</Button>
+                <Button size="small" onClick={this.handleOpen}>Sign In</Button>
                 <Dialog
                     aria-labelledby="auth-modal-title"
                     open={this.state.open}
                     onClose={this.handleClose} >
-                    <DialogTitle id="form-dialog-title">Sign Up</DialogTitle>
-                    <form autoComplete="on" onSubmit={this.signup}>
+                    <DialogTitle id="form-dialog-title">Sign In</DialogTitle>
+                    <form autoComplete="on" onSubmit={this.signin}>
                     <DialogContent>
                         <DialogContentText>
-                            Signup to create customize news feed.
+                            SignIn to read your customize news feed.
                         </DialogContentText>                        
                             <TextField required id="email-address-input" label="Email Address" className={classes.textField}
                                 margin="normal" value={email} onChange={this.handleChange('email')} fullWidth />
@@ -111,25 +93,20 @@ class SignUp extends Component {
                             <TextField required id="password-input" label="Password" className={classes.textField}
                                 type="password" margin="normal" fullWidth
                                 value={password} onChange={this.handleChange('password')} />
-
-                            <TextField required id="confirm-password-input" label=" Confirm Password" className={classes.textField}
-                                type="password" margin="normal" fullWidth
-                                value={confirmPassword} onChange={this.handleChange('confirmPassword')} />
                     </DialogContent>
 
                     <DialogActions>
                         <Button onClick={this.handleClose} color="primary"> Cancel </Button>
-                        <Button color="primary" disabled={isInvalid} type="submit"> SignUp </Button>
+                        <Button color="primary" disabled={isInvalid} type="submit"> SignIn </Button>
                     </DialogActions>
                     {error && <p>{error.message}</p>}
                     {success && <p>{success.message}</p>}
                     </form>
                 </Dialog>
+            
             </React.Fragment>
         )
     }
 }
-SignUp.propTypes = {
-    onUserChange: PropTypes.func
-}
-export default withStyles(styles, { withTheme: true })(SignUp);
+
+export default withStyles(styles, { withTheme: true })(SignIn);

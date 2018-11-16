@@ -13,6 +13,7 @@ import Logout from './Logout';
 import { AppContext } from '../constants/AppContext';
 /* Authentication */
 import auth from './Authentication/firebase';
+import SignIn from './SignIn';
 
 const sections = [
   'Technology',
@@ -72,22 +73,14 @@ class Header extends Component {
           <Toolbar className={classes.toolbarMain}>
             <Button size="small">Subscribe</Button>
 
-            <Typography
-              component="h2"
-              variant="h5"
-              color="inherit"
-              align="center"
-              noWrap
-              className={classes.toolbarTitle}
-            >
-              News Glance
-          </Typography>
+            <Typography component="h2" variant="h5" color="inherit" align="center" noWrap 
+            className={classes.toolbarTitle}> News Glance </Typography>
 
             <IconButton>
               <SearchIcon />
             </IconButton>
 
-            {context.state.userData ? <Logout></Logout> : <SignUp></SignUp>}
+            {context.state.userData ? <Logout></Logout> : <React.Fragment><SignUp></SignUp><SignIn></SignIn></React.Fragment>}
 
           </Toolbar>
 

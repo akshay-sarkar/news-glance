@@ -15,3 +15,7 @@ https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/#rea
 React Context API - Store Management - Pub / Sup Pattern - Child to Parent || Parent to Child Data Flow
 https://wesbos.com/react-context/
 #Need to introduce this in the application
+
+Next :
+Sign-In feature
+News Layout Screen
