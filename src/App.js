@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 import './App.css';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Header from './component/Header';
+import Header from './component/header/Header';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { Toolbar, Typography } from '@material-ui/core';
+
 /* Importing Context */
-import { AppProvider } from './constants/AppContext';
+import { AppProvider } from './component/util/AppContext';
+import Headlines from './component/mainContent/Headlines';
 
 const theme = createMuiTheme({
   typography: {
@@ -25,11 +28,30 @@ const style = theme => ({
       marginRight: 'auto',
     },
   },
+  toolbarSecondary: {
+    justifyContent: 'space-between'
+  },
+  linkDecoration: {
+    textDecoration: 'none',
+    color: 'black'
+  }
 });
+
+
+const sections = [
+  'Headlines',
+  'Business',
+  'Technology',
+  'Sports',
+  'Entertainment',
+  'Science',
+  'Health'
+];
 
 class App extends Component {
   render() {
     const { classes } = this.props;
+
     return (
       <AppProvider>
         <MuiThemeProvider theme={theme}>
@@ -39,28 +61,32 @@ class App extends Component {
               <CssBaseline />
 
               <div className={classes.layout}>
+                <Header />
 
-                <BrowserRouter>
+                <Router>
+
                   <div>
-                    <Header />
-                    {/* <Navigation /> */}
-                    {/* <Route
-                      exact path={routes.SIGN_UP}
-                      component={SignUp}
-                    /> */}
-
-                    {/* <Route
-                      exact path={routes.LANDING}
-                      component={SignUp}
-                    /> */}
-
+                    <Toolbar variant="dense" className={classes.toolbarSecondary}>
+                      {sections.map(section => (
+                        <Link to={section} className={classes.linkDecoration}>
+                          <Typography color="inherit" noWrap key={section}>
+                            {section}
+                          </Typography>
+                        </Link>
+                      ))}
+                    </Toolbar>
+                    <Switch>
+                      {sections.map((section, index) => (
+                        <Route path={'/' + section} component={props => <Headlines />} key={index} />
+                      ))}
+                      <Route>
+                        <Redirect to="/Headlines" path="/" />
+                      </Route>
+                    </Switch>
                   </div>
-                </BrowserRouter>
-
+                </Router>
               </div>
-
             </React.Fragment>
-
           </div>
         </MuiThemeProvider>
       </AppProvider>

@@ -1,32 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
+import { Toolbar, Button, Typography }from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 /* React Route Dom*/
 import SignUp from './SignUp';
 import Logout from './Logout';
-/* Importing Context */
-import { AppContext } from '../constants/AppContext';
-/* Authentication */
-import auth from './Authentication/firebase';
 import SignIn from './SignIn';
+/* Importing Context */
+import { AppContext } from '../util/AppContext';
+/* Authentication */
+import auth from '../util/firebase';
 
-const sections = [
-  'Technology',
-  'Design',
-  'Culture',
-  'Business',
-  'Politics',
-  'Opinion',
-  'Science',
-  'Health',
-  'Style',
-  'Travel',
-];
 
 const styles_header = {
   toolbarMain: {
@@ -34,9 +20,6 @@ const styles_header = {
   },
   toolbarTitle: {
     flex: 1,
-  },
-  toolbarSecondary: {
-    justifyContent: 'space-between',
   }
 };
 
@@ -82,14 +65,6 @@ class Header extends Component {
 
             {context.state.userData ? <Logout></Logout> : <React.Fragment><SignUp></SignUp><SignIn></SignIn></React.Fragment>}
 
-          </Toolbar>
-
-          <Toolbar variant="dense" className={classes.toolbarSecondary}>
-            {sections.map(section => (
-              <Typography color="inherit" noWrap key={section}>
-                {section}
-              </Typography>
-            ))}
           </Toolbar>
       </React.Fragment>
       )}

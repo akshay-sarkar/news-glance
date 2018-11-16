@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import {  Button } from '@material-ui/core';
-import auth from './Authentication/firebase';
+import auth from '../util/firebase';
 
 const styles = theme => ({
     container: {
