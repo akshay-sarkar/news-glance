@@ -4,13 +4,11 @@ import {  Button } from '@material-ui/core';
 import auth from '../util/firebase';
 
 const styles = theme => ({
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap'
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit
+    sectionDesktop: {
+        display: "none",
+        [theme.breakpoints.up("md")]: {
+            display: "inherit",
+        }
     }
 });
 
@@ -26,9 +24,10 @@ class Logout extends Component {
     };
     
     render() {
+        const { classes } = this.props;
         return (
             <React.Fragment>                
-                <Button variant="outlined" size="small" onClick={this.handleLogout}>Logout</Button>
+                <Button variant="outlined" size="small" onClick={this.handleLogout} className={classes.sectionDesktop}>Logout</Button>
             </React.Fragment>
         )
     }

@@ -5,11 +5,12 @@ import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from './component/header/Header';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { Toolbar, Typography } from '@material-ui/core';
+
 
 /* Importing Context */
 import { AppProvider } from './component/util/AppContext';
 import Headlines from './component/mainContent/Headlines';
+import CategoryMenu from './component/categoryMenu/CategoryMenu';
 
 const theme = createMuiTheme({
   typography: {
@@ -27,13 +28,6 @@ const style = theme => ({
       marginLeft: 'auto',
       marginRight: 'auto',
     },
-  },
-  toolbarSecondary: {
-    justifyContent: 'space-between'
-  },
-  linkDecoration: {
-    textDecoration: 'none',
-    color: 'black'
   }
 });
 
@@ -62,19 +56,10 @@ class App extends Component {
 
               <div className={classes.layout}>
                 <Header />
-
                 <Router>
 
                   <div>
-                    <Toolbar variant="dense" className={classes.toolbarSecondary}>
-                      {sections.map(section => (
-                        <Link to={section} className={classes.linkDecoration}>
-                          <Typography color="inherit" noWrap key={section}>
-                            {section}
-                          </Typography>
-                        </Link>
-                      ))}
-                    </Toolbar>
+                    <CategoryMenu sections={sections}></CategoryMenu>
                     <Switch>
                       {sections.map((section, index) => (
                         <Route path={'/' + section} component={props => <Headlines />} key={index} />

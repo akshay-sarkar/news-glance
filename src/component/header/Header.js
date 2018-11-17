@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Toolbar, Button, Typography }from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
+import { Toolbar, Button, Typography, IconButton }from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 /* React Route Dom*/
 import SignUp from './SignUp';
@@ -14,14 +13,20 @@ import { AppContext } from '../util/AppContext';
 import auth from '../util/firebase';
 
 
-const styles_header = {
+const styles_header = theme => ({
   toolbarMain: {
-    borderBottom: '1px solid brown',
+    borderBottom: '1px solid black',
   },
   toolbarTitle: {
     flex: 1,
+  },
+  sectionDesktop: {
+    display: "none",
+      [theme.breakpoints.up("md")]: {
+          display: "inherit"
+      }
   }
-};
+});
 
 class Header extends Component {
 
@@ -54,16 +59,16 @@ class Header extends Component {
       {(context) => (
       <React.Fragment>
           <Toolbar className={classes.toolbarMain}>
-            <Button size="small">Subscribe</Button>
+            <Button size="small" className={classes.sectionDesktop}>Subscribe</Button>
 
-            <Typography component="h2" variant="h5" color="inherit" align="center" noWrap 
-            className={classes.toolbarTitle}> News Glance </Typography>
+            <Typography variant="h5" color="inherit" align="center" noWrap 
+            className={classes.toolbarTitle}> NEWS GLANCE </Typography>
 
-            <IconButton>
+            <IconButton className={classes.sectionDesktop}>
               <SearchIcon />
             </IconButton>
-
-            {context.state.userData ? <Logout></Logout> : <React.Fragment><SignUp></SignUp><SignIn></SignIn></React.Fragment>}
+          
+            {context.state.userData ? <Logout ></Logout> : <React.Fragment><SignUp></SignUp><SignIn></SignIn></React.Fragment>}
 
           </Toolbar>
       </React.Fragment>
@@ -77,6 +82,7 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+/* Context Passing */
 Header.contextType = AppContext;
 
 export default withStyles(styles_header)(Header)
