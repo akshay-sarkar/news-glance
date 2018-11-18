@@ -14,12 +14,6 @@ const styles = theme => ({
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
-    },
-    sectionDesktop: {
-        display: "none",
-        [theme.breakpoints.up("md")]: {
-            display: "inherit",
-        }
     }
 });
 
@@ -100,7 +94,7 @@ class SignUp extends Component {
 
         return (
             <React.Fragment>
-                <Button size="small" onClick={this.handleOpen} className={classes.sectionDesktop}>Sign up</Button>
+                <Button size="small" onClick={this.handleOpen}>Sign up</Button>
                 <Dialog
                     aria-labelledby="auth-modal-title"
                     open={this.state.open}

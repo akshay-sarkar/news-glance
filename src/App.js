@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import './App.css';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from './component/header/Header';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
+import SlideMenu from './component/categoryMenu/SlideMenu';
 
 /* Importing Context */
 import { AppProvider } from './component/util/AppContext';
+import { AppContext } from './component/util/AppContext';
 import Headlines from './component/mainContent/Headlines';
 import CategoryMenu from './component/categoryMenu/CategoryMenu';
 
@@ -28,19 +29,14 @@ const style = theme => ({
       marginLeft: 'auto',
       marginRight: 'auto',
     },
+  },
+  sectionMobile: {
+    display: "inherit",
+    [theme.breakpoints.up("md")]: {
+      display: "none"
+    }
   }
 });
-
-
-const sections = [
-  'Headlines',
-  'Business',
-  'Technology',
-  'Sports',
-  'Entertainment',
-  'Science',
-  'Health'
-];
 
 class App extends Component {
   render() {
@@ -53,22 +49,28 @@ class App extends Component {
             <React.Fragment>
               {/* Reset.css */}
               <CssBaseline />
+              <div className={classes.sectionMobile}>
+                <SlideMenu></SlideMenu>
+              </div>
 
               <div className={classes.layout}>
                 <Header />
                 <Router>
-
-                  <div>
-                    <CategoryMenu sections={sections}></CategoryMenu>
-                    <Switch>
-                      {sections.map((section, index) => (
-                        <Route path={'/' + section} component={props => <Headlines />} key={index} />
-                      ))}
-                      <Route>
-                        <Redirect to="/Headlines" path="/" />
-                      </Route>
-                    </Switch>
-                  </div>
+                  <AppContext.Consumer>
+                    {(context) => (
+                      <React.Fragment>
+                        <CategoryMenu sections={context.state.sections}></CategoryMenu>
+                        <Switch>
+                          {context.state.sections.map((section, index) => (
+                            <Route path={'/' + section} component={props => <Headlines />} key={index} />
+                          ))}
+                          <Route>
+                            <Redirect to="/Headlines" path="/" />
+                          </Route>
+                        </Switch>
+                      </React.Fragment>
+                    )}
+                  </AppContext.Consumer>
                 </Router>
               </div>
             </React.Fragment>

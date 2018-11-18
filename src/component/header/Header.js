@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Toolbar, Button, Typography, IconButton }from '@material-ui/core';
+import { Toolbar, Button, Typography, IconButton } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 /* React Route Dom*/
 import SignUp from './SignUp';
@@ -14,6 +14,9 @@ import auth from '../util/firebase';
 
 
 const styles_header = theme => ({
+  root: {
+    flexGrow: 1,
+  },
   toolbarMain: {
     borderBottom: '1px solid black',
   },
@@ -22,9 +25,15 @@ const styles_header = theme => ({
   },
   sectionDesktop: {
     display: "none",
-      [theme.breakpoints.up("md")]: {
-          display: "inherit"
-      }
+    [theme.breakpoints.up("md")]: {
+      display: "inherit"
+    }
+  },
+  sectionMobile: {
+    display: "inherit",
+    [theme.breakpoints.up("md")]: {
+      display: "none"
+    }
   }
 });
 
@@ -43,11 +52,15 @@ class Header extends Component {
         console.log(this.context);
         this.context.updateUserData(user);
         console.log('user is set state..');
-      }else{
+      } else {
         this.context.updateUserData(null);
         console.log('not authorized');
       }
     })
+  }
+
+  showSettings(event) {
+    event.preventDefault();
   }
 
   render() {
@@ -56,23 +69,32 @@ class Header extends Component {
 
     return (
       <AppContext.Consumer>
-      {(context) => (
-      <React.Fragment>
-          <Toolbar className={classes.toolbarMain}>
-            <Button size="small" className={classes.sectionDesktop}>Subscribe</Button>
+        {(context) => (
+          <React.Fragment>
+            <div className={classes.sectionDesktop}>
+              <Toolbar className={classes.toolbarMain}>
+                <Button size="small">Subscribe</Button>
 
-            <Typography variant="h5" color="inherit" align="center" noWrap 
-            className={classes.toolbarTitle}> NEWS GLANCE </Typography>
+                <Typography variant="h5" color="inherit" align="center" noWrap
+                  className={classes.toolbarTitle}> NEWS GLANCE </Typography>
 
-            <IconButton className={classes.sectionDesktop}>
-              <SearchIcon />
-            </IconButton>
-          
-            {context.state.userData ? <Logout ></Logout> : <React.Fragment><SignUp></SignUp><SignIn></SignIn></React.Fragment>}
+                <IconButton>
+                  <SearchIcon />
+                </IconButton>
 
-          </Toolbar>
-      </React.Fragment>
-      )}
+                {context.state.userData ? <Logout ></Logout> : <React.Fragment><SignUp></SignUp><SignIn></SignIn></React.Fragment>}
+
+              </Toolbar>
+            </div>
+            <div className={classes.sectionMobile}>
+              <Toolbar className={classes.toolbarMain}>
+                <Typography variant="h5" color="inherit" align="right" noWrap
+                  className={classes.toolbarTitle}> NEWS GLANCE </Typography>    
+                
+              </Toolbar>
+            </div>
+          </React.Fragment>
+        )}
       </AppContext.Consumer>
     )
   }

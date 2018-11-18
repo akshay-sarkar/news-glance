@@ -5,7 +5,16 @@ const AppContext = React.createContext();
 class AppProvider  extends Component {
     state = {
         age: 100,
-        userData : null      
+        userData : null,
+        sections : [
+            'Headlines',
+            'Business',
+            'Technology',
+            'Sports',
+            'Entertainment',
+            'Science',
+            'Health'
+        ]    
     }
     render() {
         return (

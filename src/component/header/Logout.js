@@ -3,15 +3,6 @@ import { withStyles } from '@material-ui/core/styles';
 import {  Button } from '@material-ui/core';
 import auth from '../util/firebase';
 
-const styles = theme => ({
-    sectionDesktop: {
-        display: "none",
-        [theme.breakpoints.up("md")]: {
-            display: "inherit",
-        }
-    }
-});
-
 class Logout extends Component {
 
     handleLogout = () => {
@@ -24,14 +15,13 @@ class Logout extends Component {
     };
     
     render() {
-        const { classes } = this.props;
         return (
             <React.Fragment>                
-                <Button variant="outlined" size="small" onClick={this.handleLogout} className={classes.sectionDesktop}>Logout</Button>
+                <Button variant="outlined" size="small" onClick={this.handleLogout}>Logout</Button>
             </React.Fragment>
         )
     }
 }
 
 
-export default withStyles(styles, { withTheme: true })(Logout);
+export default Logout;
