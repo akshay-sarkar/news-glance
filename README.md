@@ -14,7 +14,10 @@ https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/#rea
 
 React Context API - Store Management - Pub / Sup Pattern - Child to Parent || Parent to Child Data Flow
 https://wesbos.com/react-context/
-#Need to introduce this in the application
+
+Slide-Bar Component for React - 
+Github : https://github.com/negomi/react-burger-menu
+Tutorial : https://alligator.io/react/react-burger-menu-sidebar/
 
 
 #Days Of Code - Twitter

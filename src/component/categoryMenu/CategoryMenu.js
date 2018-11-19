@@ -35,21 +35,21 @@ class CategoryMenu extends Component {
         anchorEl: null,
         mobileMoreAnchorEl: null
     };
-    
+
     render() {
         const { classes, sections } = this.props;
         return (
             <React.Fragment>
                 <Toolbar variant="dense" className={classes.toolbarSecondary}>
-                <div className={classes.sectionDesktop}>
-                    {sections.map(section => (
-                        <Link to={section} className={classes.linkDecoration} key={section}>
-                            <Typography color="inherit" noWrap key={section}>
-                                {section}
-                            </Typography>
-                        </Link>
-                    ))}
-                </div>
+                    <div className={classes.sectionDesktop}>
+                        {sections.map(section => (
+                            <Link to={section} className={classes.linkDecoration} key={section}>
+                                <Typography color="inherit" noWrap key={section}>
+                                    {section}
+                                </Typography>
+                            </Link>
+                        ))}
+                    </div>
                 </Toolbar>
             </React.Fragment>
         )

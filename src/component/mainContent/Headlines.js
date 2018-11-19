@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import NewsCard from './NewsCard';
-import * as data from '../util/dummyData';
-
 
 const styles = theme => ({
   root: {
@@ -24,7 +21,6 @@ class Headlines extends Component {
     super(props)
 
     this.state = {
-      category: window.location.pathname,
       newsData: [],
       isLoading: false
     }
@@ -32,20 +28,29 @@ class Headlines extends Component {
 
   componentDidMount() {
     this.getArticles();
+
   }
   getArticles() {
-    //   fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=04738187122045d5a855405c5462fc0b')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     this.setState({ newsData : data.articles, isLoading: true });
-    //     console.log(this.state.newsData);
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error occured while fetching data")
-    //     console.log(error)
-    // });
-    this.setState({ newsData: data.articles, isLoading: true });
-    console.log(data.articles);
+    let arr = window.location.href.split('/');
+    //console.log(arr[arr.length-1]);
+    let key = '04738187122045d5a855405c5462fc0b';
+    let country = 'us', category = arr[arr.length-1];
+    if(category === 'Headlines'){
+      category = ''
+    }
+
+    fetch(`https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${key}&category=${category}`)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ newsData: data.articles, isLoading: true });
+        console.log(this.state.newsData);
+      })
+      .catch((error) => {
+        console.log("Error occured while fetching data")
+        console.log(error)
+      });
+    //this.setState({ newsData: data.articles, isLoading: true });
+    // console.log(data.articles);
   }
 
   render() {
@@ -69,9 +74,7 @@ class Headlines extends Component {
     )
   }
 }
-
 Headlines.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
 export default withStyles(styles)(Headlines);

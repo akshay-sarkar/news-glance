@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { slide as Menu } from "react-burger-menu";
 import { AppContext } from '../util/AppContext';
+import Link from "react-router-dom/Link";
 
 export default class SlideMenu extends Component {
   render() {
@@ -11,9 +12,9 @@ export default class SlideMenu extends Component {
             <React.Fragment>
               <Menu>
               {context.state.sections.map((section, index) => (
-                <a className="menu-item" href="/" key={index}>
-                  {section}
-                </a>
+                 <Link to={section} className="menu-item" key={section}>
+                    {section}
+                  </Link>            
               ))}
               </Menu>
             </React.Fragment>

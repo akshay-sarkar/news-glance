@@ -49,30 +49,34 @@ class App extends Component {
             <React.Fragment>
               {/* Reset.css */}
               <CssBaseline />
-              <div className={classes.sectionMobile}>
-                <SlideMenu></SlideMenu>
-              </div>
 
-              <div className={classes.layout}>
-                <Header />
-                <Router>
-                  <AppContext.Consumer>
-                    {(context) => (
-                      <React.Fragment>
-                        <CategoryMenu sections={context.state.sections}></CategoryMenu>
-                        <Switch>
-                          {context.state.sections.map((section, index) => (
-                            <Route path={'/' + section} component={props => <Headlines />} key={index} />
-                          ))}
-                          <Route>
-                            <Redirect to="/Headlines" path="/" />
-                          </Route>
-                        </Switch>
-                      </React.Fragment>
-                    )}
-                  </AppContext.Consumer>
-                </Router>
-              </div>
+              <Router>
+                <React.Fragment>
+                  <div className={classes.sectionMobile}>
+                    <SlideMenu></SlideMenu>
+                  </div>
+
+                  <div className={classes.layout}>
+                    <Header />
+                    <AppContext.Consumer>
+                      {(context) => (
+                        <React.Fragment>
+                          <CategoryMenu sections={context.state.sections}></CategoryMenu>
+                          <Switch>
+                            {context.state.sections.map((section, index) => (
+                              <Route path={'/' + section} component={props => <Headlines />} key={index} />
+                            ))}
+                            <Route>
+                              <Redirect to="/Headlines" path="/" />
+                            </Route>
+                          </Switch>
+                        </React.Fragment>
+                      )}
+                    </AppContext.Consumer>
+
+                  </div>
+                </React.Fragment>
+              </Router>
             </React.Fragment>
           </div>
         </MuiThemeProvider>
