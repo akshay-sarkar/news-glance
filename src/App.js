@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import './App.css';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -67,7 +67,7 @@ class App extends Component {
                               <Route path={'/' + section} component={props => <Headlines />} key={index} />
                             ))}
                             <Route>
-                              <Redirect to="/Headlines" path="/" />
+                              <Redirect to='/Headlines' path="/" />
                             </Route>
                           </Switch>
                         </React.Fragment>

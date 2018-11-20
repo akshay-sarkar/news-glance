@@ -68,7 +68,7 @@ class Headlines extends Component {
                 ))}
               </Grid>
             </div>
-          ) : "No courses found"
+          ) : "No News found"
         }
       </div>
     )
