@@ -12,6 +12,14 @@ const styles = theme => ({
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
+    },
+    btnStyling : { 
+        color: '#FFFFFF',
+        fontSize: '1rem',
+        [theme.breakpoints.up("md")]: {
+            color: 'rgba(0, 0, 0, 0.87)',
+            fontSize: '0.8125rem'
+        }
     }
 });
 
@@ -64,7 +72,7 @@ class SignIn extends Component {
 
     render() {
 
-        const { classes } = this.props;
+        const { classes  } = this.props;
         const {
             email,
             password,
@@ -76,7 +84,7 @@ class SignIn extends Component {
 
         return (
             <React.Fragment>
-                <Button size="small" onClick={this.handleOpen}>Sign In</Button>
+                <Button size="small" onClick={this.handleOpen}  className={classes.btnStyling} >Sign In</Button>              
                 <Dialog
                     aria-labelledby="auth-modal-title"
                     open={this.state.open}

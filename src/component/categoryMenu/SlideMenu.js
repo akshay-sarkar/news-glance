@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import { slide as Menu } from "react-burger-menu";
 import { AppContext } from '../util/AppContext';
 import Link from "react-router-dom/Link";
-import { Button, TextField } from '@material-ui/core';
+import { List, ListItem, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import SignUp from '../header/SignUp';
+import SignIn from '../header/SignIn';
+import Logout from '../header/Logout';
 
 const styles = theme => ({
-  btnDesign: {
-      color: 'white'
-  },
   textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   }
 });
 
@@ -39,14 +39,31 @@ class SlideMenu extends Component {
           {(context) => (
             <React.Fragment>
               <Menu isOpen={false}>
-              <Button className={classes.btnDesign} onClick={this.handleOpenSignUp}>Signup</Button>
-              <Button className={classes.btnDesign} onClick={this.handleOpenSignIn}>Login</Button>
-              <hr/>
-              {context.state.sections.map((section, index) => (
-                 <Link to={'/'+section} className="menu-item" key={section}>
-                    {section}
-                  </Link>            
-              ))}
+                <List component="nav">
+                  { context.state.userData === null ?
+                    <ListItem button onClick={this.handleOpenSignUp}>
+                      <SignUp></SignUp>
+                    </ListItem> : ''
+                  }
+                  { context.state.userData === null ?
+                    <ListItem button divider onClick={this.handleOpenSignUp}>
+                      <SignIn></SignIn>
+                    </ListItem>
+                    :
+                    <ListItem button divider onClick={this.handleOpenSignUp}>
+                      <Logout></Logout>
+                    </ListItem>
+                  }
+
+                  <hr />
+                  {context.state.sections.map((section, index) => (
+                    <ListItem button divider key={section} onClick={this.handleOpenSignUp}>
+                      <Link to={'/' + section} className="menu-item" key={section}>
+                        <Typography style={{ color: '#FFFFFF', fontSize: '1em' }} key={section}>{section}</Typography>
+                      </Link>
+                    </ListItem>
+                  ))}
+                </List>
               </Menu>
             </React.Fragment>
           )}
