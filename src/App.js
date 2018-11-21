@@ -64,7 +64,7 @@ class App extends Component {
                           <CategoryMenu sections={context.state.sections}></CategoryMenu>
                           <Switch>
                             {context.state.sections.map((section, index) => (
-                              <Route path={'/' + section} component={props => <Headlines />} key={index} />
+                              <Route path={'/' + section} component={props => <Headlines context={context} />} key={index} />
                             ))}
                             <Route>
                               <Redirect to='/Headlines' path="/" />

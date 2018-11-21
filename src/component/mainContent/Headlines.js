@@ -19,8 +19,7 @@ const styles = theme => ({
 class Headlines extends Component {
 
   constructor(props) {
-    super(props)
-
+    super(props);
     this.state = {
       newsData: [],
       isLoading: false
@@ -33,28 +32,29 @@ class Headlines extends Component {
   }
   getArticles() {
     let arr = window.location.href.split('/');
-    //console.log(arr[arr.length-1]);
+    console.log(arr[arr.length-1]);
     let key = '04738187122045d5a855405c5462fc0b';
-    let country = 'in', category = arr[arr.length-1];
+    let country = this.props.context.state.countryEdition, category = arr[arr.length-1];
     if(category === 'Headlines'){
       category = ''
     }
 
-    // fetch(`https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${key}&category=${category}`)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     this.setState({ newsData: data.articles, isLoading: true });
-    //     console.log(this.state.newsData);
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error occured while fetching data")
-    //     console.log(error)
-    //   });
-    this.setState({ newsData: data.articles, isLoading: true });
-    console.log(data.articles);
+    fetch(`https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${key}&category=${category}`)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ newsData: data.articles, isLoading: true });
+        console.log(this.state.newsData);
+      })
+      .catch((error) => {
+        console.log("Error occured while fetching data")
+        console.log(error)
+      });
+    // this.setState({ newsData: data.articles, isLoading: true });
+    // console.log(data.articles);
   }
 
   render() {
+
     const { classes } = this.props;
     return (
       <div className={classes.root}>

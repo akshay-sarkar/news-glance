@@ -6,6 +6,7 @@ class AppProvider  extends Component {
     state = {
         age: 100,
         userData : null,
+        countryEdition:'us',
         newsData: {
             Headlines: [],
             Business: [],
@@ -34,9 +35,10 @@ class AppProvider  extends Component {
                     obj[key] = value;
                     this.setState({ obj });
                 },
-                growAYearOlder: () => this.setState({
-                    age: this.state.age + 1
-                }),
+                changeCountryEdition: (edition) => {
+                    this.setState({ countryEdition: edition });
+                    console.log('edition modified');
+                },
                 updateUserData: (user) => this.setState({
                     userData : user
                 })

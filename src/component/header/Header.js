@@ -7,6 +7,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import SignUp from './SignUp';
 import Logout from './Logout';
 import SignIn from './SignIn';
+import CountryEdition from './CountryEdition';
 /* Importing Context */
 import { AppContext } from '../util/AppContext';
 /* Authentication */
@@ -73,7 +74,8 @@ class Header extends Component {
           <React.Fragment>
             <div className={classes.sectionDesktop}>
               <Toolbar className={classes.toolbarMain}>
-                <Button size="small">Subscribe</Button>
+                {/* <Button size="small">Subscribe</Button> */}
+                <CountryEdition context={context}></CountryEdition>
 
                 <Typography variant="h5" color="inherit" align="center" noWrap
                   className={classes.toolbarTitle}> NEWS GLANCE </Typography>

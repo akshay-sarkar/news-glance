@@ -40,12 +40,12 @@ class SlideMenu extends Component {
             <React.Fragment>
               <Menu isOpen={false}>
                 <List component="nav">
-                  { context.state.userData === null ?
+                  {context.state.userData === null ?
                     <ListItem button onClick={this.handleOpenSignUp}>
                       <SignUp></SignUp>
                     </ListItem> : ''
                   }
-                  { context.state.userData === null ?
+                  {context.state.userData === null ?
                     <ListItem button divider onClick={this.handleOpenSignUp}>
                       <SignIn></SignIn>
                     </ListItem>
