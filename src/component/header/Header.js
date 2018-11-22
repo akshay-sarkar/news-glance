@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Toolbar, Button, Typography, IconButton } from '@material-ui/core';
+import { Toolbar, Typography, IconButton } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 /* React Route Dom*/
 import SignUp from './SignUp';

@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import SignUp from '../header/SignUp';
 import SignIn from '../header/SignIn';
 import Logout from '../header/Logout';
+import CountryEdition from '../header/CountryEdition';
 
 const styles = theme => ({
   textField: {
@@ -32,7 +33,7 @@ class SlideMenu extends Component {
     this.setState({ isOpen: false });
   };
   render() {
-    const { classes } = this.props;
+    
     return (
       <div>
         <AppContext.Consumer>
@@ -40,6 +41,8 @@ class SlideMenu extends Component {
             <React.Fragment>
               <Menu isOpen={false}>
                 <List component="nav">
+                  <CountryEdition context={context} ></CountryEdition>
+
                   {context.state.userData === null ?
                     <ListItem button onClick={this.handleOpenSignUp}>
                       <SignUp></SignUp>
