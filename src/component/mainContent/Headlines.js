@@ -38,7 +38,7 @@ class Headlines extends Component {
     if(category === 'Headlines'){
       category = ''
     }
-
+    debugger;
     fetch(`https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${key}&category=${category}`)
       .then(response => response.json())
       .then(data => {

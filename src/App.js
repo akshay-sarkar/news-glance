@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import './App.css';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from './component/header/Header';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import SlideMenu from './component/categoryMenu/SlideMenu';
 
 /* Importing Context */
@@ -13,7 +13,7 @@ import { AppContext } from './component/util/AppContext';
 import Headlines from './component/mainContent/Headlines';
 import CategoryMenu from './component/categoryMenu/CategoryMenu';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   typography: {
     useNextVariants: true
   }
@@ -51,7 +51,7 @@ class App extends Component {
               <CssBaseline />
 
               <Router>
-                <React.Fragment>
+                <>
                   <div className={classes.sectionMobile}>
                     <SlideMenu></SlideMenu>
                   </div>
@@ -62,20 +62,18 @@ class App extends Component {
                       {(context) => (
                         <React.Fragment>
                           <CategoryMenu sections={context.state.sections}></CategoryMenu>
-                          <Switch>
+                          <Routes>
                             {context.state.sections.map((section, index) => (
-                              <Route path={'/' + section} component={props => <Headlines context={context} />} key={index} />
+                              <Route path={'/' + section} element={<Headlines context={context} />} key={index} />
                             ))}
-                            <Route>
-                              <Redirect to='/Headlines' path="/" />
-                            </Route>
-                          </Switch>
+                            <Route path="*" element={<Headlines context={context} />} />
+                          </Routes>
                         </React.Fragment>
                       )}
                     </AppContext.Consumer>
 
                   </div>
-                </React.Fragment>
+                </>
               </Router>
             </React.Fragment>
           </div>

@@ -1,19 +1,19 @@
 {
   "name": "news-glance",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "homepage": "http://akshay-sarkar.github.io/news-glance",
   "dependencies": {
-    "@material-ui/core": "^3.5.1",
-    "@material-ui/icons": "^3.0.1",
-    "firebase": "^5.5.8",
-    "prop-types": "^15.6.2",
-    "react": "^16.6.3",
-    "react-burger-menu": "^2.5.4",
-    "react-dom": "^16.6.3",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.1",
-    "react-swipeable-views": "^0.13.0"
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "firebase": "^11.6.0",
+    "prop-types": "^15.8.1",
+    "react": "^17.0.0",
+    "react-burger-menu": "^3.1.0",
+    "react-dom": "^17.0.0",
+    "react-router-dom": "^6.4.0",
+    "react-scripts": "5.0.1",
+    "react-swipeable-views": "^0.14.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -26,13 +26,19 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
+  "browserslist": {
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "edge >= 18"
+    ],
+    "production": [
+      "> 0.2%",
+      "not dead"
+    ]
+  },
   "devDependencies": {
-    "gh-pages": "^2.0.1"
+    "gh-pages": "^6.3.0"
   }
 }
