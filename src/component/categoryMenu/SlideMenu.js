@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { slide as Menu } from "react-burger-menu";
 import { AppContext } from '../util/AppContext';
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 import { List, ListItem, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import SignUp from '../header/SignUp';
-import SignIn from '../header/SignIn';
-import Logout from '../header/Logout';
+// import SignUp from '../header/SignUp';
+// import SignIn from '../header/SignIn';
+// import Logout from '../header/Logout';
 import CountryEdition from '../header/CountryEdition';
 
 const styles = theme => ({
@@ -43,7 +43,7 @@ class SlideMenu extends Component {
                 <List component="nav">
                   <CountryEdition context={context} ></CountryEdition>
 
-                  {context.state.userData === null ?
+                  {/* {context.state.userData === null ?
                     <ListItem button onClick={this.handleOpenSignUp}>
                       <SignUp></SignUp>
                     </ListItem> : ''
@@ -56,7 +56,7 @@ class SlideMenu extends Component {
                     <ListItem button divider onClick={this.handleOpenSignUp}>
                       <Logout></Logout>
                     </ListItem>
-                  }
+                  } */}
 
                   <hr />
                   {context.state.sections.map((section, index) => (

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from "prop-types";
 import { Toolbar, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 
 const style = theme => ({
     toolbarSecondary: {

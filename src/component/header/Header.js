@@ -4,14 +4,14 @@ import { withStyles } from '@material-ui/core/styles';
 import { Toolbar, Typography, IconButton } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 /* React Route Dom*/
-import SignUp from './SignUp';
-import Logout from './Logout';
-import SignIn from './SignIn';
+// import SignUp from './SignUp';
+// import Logout from './Logout';
+// import SignIn from './SignIn';
 import CountryEdition from './CountryEdition';
 /* Importing Context */
 import { AppContext } from '../util/AppContext';
 /* Authentication */
-import auth from '../util/firebase';
+// import auth from '../util/firebase';
 
 
 const styles_header = theme => ({
@@ -47,17 +47,17 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        //this.setState({user});
-        console.log(this.context);
-        this.context.updateUserData(user);
-        console.log('user is set state..');
-      } else {
-        this.context.updateUserData(null);
-        console.log('not authorized');
-      }
-    })
+    // auth.onAuthStateChanged((user) => {
+    //   if (user) {
+    //     //this.setState({user});
+    //     console.log(this.context);
+    //     this.context.updateUserData(user);
+    //     console.log('user is set state..');
+    //   } else {
+    //     this.context.updateUserData(null);
+    //     console.log('not authorized');
+    //   }
+    // })
   }
 
   showSettings(event) {
@@ -84,7 +84,7 @@ class Header extends Component {
                   <SearchIcon />
                 </IconButton>
 
-                {context.state.userData ? <Logout ></Logout> : <React.Fragment><SignUp></SignUp><SignIn></SignIn></React.Fragment>}
+                {/* {context.state.userData ? <Logout ></Logout> : <React.Fragment><SignUp></SignUp><SignIn></SignIn></React.Fragment>} */}
 
               </Toolbar>
             </div>
