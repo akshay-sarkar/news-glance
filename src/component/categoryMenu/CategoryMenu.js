@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from "prop-types";
 import { Toolbar, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import {Link} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const style = theme => ({
     toolbarSecondary: {
@@ -10,7 +10,21 @@ const style = theme => ({
     },
     linkDecoration: {
         textDecoration: 'none',
-        color: 'black'
+        color: theme.palette.text.primary,
+        margin: '0 10px',
+        padding: '5px 10px',
+        borderRadius: '4px',
+        transition: 'background-color 0.3s ease',
+        '&:hover': {
+            backgroundColor: theme.palette.action.hover,
+        }
+    },
+    activeLink: {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
     },
     root: {
         width: "100%"
@@ -43,11 +57,17 @@ class CategoryMenu extends Component {
                 <Toolbar variant="dense" className={classes.toolbarSecondary}>
                     <div className={classes.sectionDesktop}>
                         {sections.map(section => (
-                            <Link to={section} className={classes.linkDecoration} key={section}>
-                                <Typography color="inherit" noWrap key={section}>
+                            <NavLink
+                                to={section}
+                                key={section}
+                                className={({ isActive }) =>
+                                    isActive ? `${classes.linkDecoration} ${classes.activeLink}` : classes.linkDecoration
+                                }
+                            >
+                                <Typography color="inherit" noWrap>
                                     {section}
                                 </Typography>
-                            </Link>
+                            </NavLink>
                         ))}
                     </div>
                 </Toolbar>

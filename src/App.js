@@ -13,7 +13,25 @@ import { AppContext } from './component/util/AppContext';
 import Headlines from './component/mainContent/Headlines';
 import CategoryMenu from './component/categoryMenu/CategoryMenu';
 
-const theme = createTheme({
+// Create theme based on mode
+const getTheme = (mode) => createTheme({
+  palette: {
+    type: mode,
+    primary: {
+      main: mode === 'dark' ? '#90caf9' : '#1976d2',
+    },
+    secondary: {
+      main: mode === 'dark' ? '#f48fb1' : '#dc004e',
+    },
+    background: {
+      default: mode === 'dark' ? '#303030' : '#fff',
+      paper: mode === 'dark' ? '#424242' : '#fff',
+    },
+    text: {
+      primary: mode === 'dark' ? '#fff' : 'rgba(0, 0, 0, 0.87)',
+      secondary: mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.54)',
+    },
+  },
   typography: {
     useNextVariants: true
   }
@@ -44,23 +62,26 @@ class App extends Component {
 
     return (
       <AppProvider>
-        <MuiThemeProvider theme={theme}>
-          <div className="App">
-            <React.Fragment>
-              {/* Reset.css */}
-              <CssBaseline />
+        <AppContext.Consumer>
+          {(context) => {
+            // Get the current theme mode from context
+            const currentTheme = getTheme(context.state.themeMode);
 
-              <Router>
-                <>
-                  <div className={classes.sectionMobile}>
-                    <SlideMenu></SlideMenu>
-                  </div>
+            return (
+              <MuiThemeProvider theme={currentTheme}>
+                <div className={`App ${context.state.themeMode === 'dark' ? 'dark-mode' : 'light-mode'}`}>
+                  <React.Fragment>
+                    {/* Reset.css */}
+                    <CssBaseline />
 
-                  <div className={classes.layout}>
-                    <Header />
-                    <AppContext.Consumer>
-                      {(context) => (
-                        <React.Fragment>
+                    <Router>
+                      <>
+                        <div className={classes.sectionMobile}>
+                          <SlideMenu></SlideMenu>
+                        </div>
+
+                        <div className={classes.layout}>
+                          <Header />
                           <CategoryMenu sections={context.state.sections}></CategoryMenu>
                           <Routes>
                             {context.state.sections.map((section, index) => (
@@ -68,16 +89,15 @@ class App extends Component {
                             ))}
                             <Route path="*" element={<Headlines context={context} />} />
                           </Routes>
-                        </React.Fragment>
-                      )}
-                    </AppContext.Consumer>
-
-                  </div>
-                </>
-              </Router>
-            </React.Fragment>
-          </div>
-        </MuiThemeProvider>
+                        </div>
+                      </>
+                    </Router>
+                  </React.Fragment>
+                </div>
+              </MuiThemeProvider>
+            );
+          }}
+        </AppContext.Consumer>
       </AppProvider>
     );
   }

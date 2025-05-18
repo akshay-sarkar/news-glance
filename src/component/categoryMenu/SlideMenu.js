@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { slide as Menu } from "react-burger-menu";
 import { AppContext } from '../util/AppContext';
-import {Link} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { List, ListItem, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 // import SignUp from '../header/SignUp';
@@ -24,16 +24,16 @@ class SlideMenu extends Component {
   }
 
   handleOpenSignUp = () => {
-    //close menu as well  
+    //close menu as well
     this.setState({ isOpen: false });
   };
 
   handleOpenSignIn = () => {
-    //close menu as well  
+    //close menu as well
     this.setState({ isOpen: false });
   };
   render() {
-    
+
     return (
       <div>
         <AppContext.Consumer>
@@ -61,9 +61,14 @@ class SlideMenu extends Component {
                   <hr />
                   {context.state.sections.map((section, index) => (
                     <ListItem button divider key={section} onClick={this.handleOpenSignUp}>
-                      <Link to={'/' + section} className="menu-item" key={section}>
-                        <Typography style={{ color: '#FFFFFF', fontSize: '1em' }} key={section}>{section}</Typography>
-                      </Link>
+                      <NavLink
+                        to={'/' + section}
+                        className={({ isActive }) =>
+                          isActive ? "menu-item menu-item-active" : "menu-item"
+                        }
+                      >
+                        <Typography style={{ color: '#FFFFFF', fontSize: '1em' }}>{section}</Typography>
+                      </NavLink>
                     </ListItem>
                   ))}
                 </List>
