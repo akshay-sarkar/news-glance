@@ -46,4 +46,10 @@ Home Screen Layout- In Progress
 
 #Next
 Personlize choices news
+--
+In 2025:
+Code Improvement using Clien, Continue.dev and Augment AI Tools.
+Re-setup and Update Node Modules.
+Dark/Light Mode Feature for website.
+Global Styling Improvements
 
