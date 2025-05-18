@@ -13,26 +13,38 @@ const styles = theme => ({
     },
     select: {
         '&:before': {
-            borderColor: '#fff'
+            borderColor: theme.palette.type === 'dark'
+                ? theme.palette.primary.light
+                : theme.palette.primary.main
         },
         '&:after': {
-            borderColor: '#fff'
+            borderColor: theme.palette.type === 'dark'
+                ? theme.palette.primary.light
+                : theme.palette.primary.main
         },
-        color: '#fff',
-        [theme.breakpoints.up("md")]: {
-            '&:before': {
-                borderColor: '#000'
-            },
-            '&:after': {
-                borderColor: '#000'
-            },
-            color: '#000'
+        color: theme.palette.text.primary,
+        '& svg': {
+            color: theme.palette.text.primary,
         }
     },
     colorText: {
-        color: '#fff',
-        [theme.breakpoints.up("md")]: {
-            color: '#000'
+        color: theme.palette.text.secondary,
+        fontWeight: 500,
+        fontSize: '0.9rem'
+    },
+    menuItem: {
+        '&:hover': {
+            backgroundColor: theme.palette.action.hover,
+        },
+        '&.Mui-selected': {
+            backgroundColor: theme.palette.type === 'dark'
+                ? theme.palette.primary.dark
+                : theme.palette.primary.light,
+            '&:hover': {
+                backgroundColor: theme.palette.type === 'dark'
+                    ? theme.palette.primary.main
+                    : theme.palette.primary.light,
+            }
         }
     }
 });
@@ -51,27 +63,29 @@ class CountryEdition extends Component {
     };
     render() {
         const { context, classes } = this.props;
-        
+
         return (
             <form className={classes.root} autoComplete="off">
                 <FormControl className={classes.formControl}>
-                    {/* <InputLabel htmlFor="country-helper">Country</InputLabel> */}
                     <Select
                         value={this.state.country}
                         onChange={this.handleChange.bind(this, context)}
                         input={<Input name="country" id="country-helper" className={classes.select}/>}
-                        inputProps={{
-                            classes: {
-                                icon: classes.colorText,
+                        MenuProps={{
+                            PaperProps: {
+                                style: {
+                                    maxHeight: 300,
+                                },
                             },
                         }}
                         >
-                        <MenuItem value="us">US Edition</MenuItem>
-                        <MenuItem value="in">India Edition</MenuItem>
-                        <MenuItem value="au">Australia Edition</MenuItem>
-                        {/* <MenuItem value="cn">China Edition</MenuItem> */}
+                        <MenuItem value="us" className={classes.menuItem}>US Edition</MenuItem>
+                        <MenuItem value="in" className={classes.menuItem}>India Edition</MenuItem>
+                        <MenuItem value="au" className={classes.menuItem}>Australia Edition</MenuItem>
+                        <MenuItem value="gb" className={classes.menuItem}>UK Edition</MenuItem>
+                        <MenuItem value="ca" className={classes.menuItem}>Canada Edition</MenuItem>
                     </Select>
-                    <FormHelperText  className={classes.colorText}>Country Edition</FormHelperText>
+                    <FormHelperText className={classes.colorText}>Country Edition</FormHelperText>
                 </FormControl>
             </form>
         )

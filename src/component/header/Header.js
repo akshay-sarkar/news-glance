@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Toolbar, Typography, IconButton } from '@material-ui/core';
+import { Toolbar, Typography, IconButton, Switch, Tooltip } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import Brightness4Icon from '@material-ui/icons/Brightness4'; // Moon icon for dark mode
+import Brightness7Icon from '@material-ui/icons/Brightness7'; // Sun icon for light mode
 /* React Route Dom*/
 // import SignUp from './SignUp';
 // import Logout from './Logout';
@@ -19,7 +21,7 @@ const styles_header = theme => ({
     flexGrow: 1,
   },
   toolbarMain: {
-    borderBottom: '1px solid black',
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
   toolbarTitle: {
     flex: 1,
@@ -35,7 +37,23 @@ const styles_header = theme => ({
     [theme.breakpoints.up("md")]: {
       display: "none"
     }
-  }
+  },
+  themeSwitch: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: theme.spacing.unit * 2,
+  },
+  switchBase: {
+    color: theme.palette.common.white,
+    '&$checked': {
+      color: theme.palette.common.white,
+    },
+    '&$checked + $track': {
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
+  checked: {},
+  track: {},
 });
 
 class Header extends Component {
@@ -80,6 +98,22 @@ class Header extends Component {
                 <Typography variant="h5" color="inherit" align="center" noWrap
                   className={classes.toolbarTitle}> NEWS GLANCE </Typography>
 
+                <div className={classes.themeSwitch}>
+                  <Tooltip title={context.state.themeMode === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}>
+                    <Switch
+                      checked={context.state.themeMode === 'dark'}
+                      onChange={context.toggleThemeMode}
+                      classes={{
+                        switchBase: classes.switchBase,
+                        checked: classes.checked,
+                        track: classes.track,
+                      }}
+                      icon={<Brightness7Icon />}
+                      checkedIcon={<Brightness4Icon />}
+                    />
+                  </Tooltip>
+                </div>
+
                 <IconButton>
                   <SearchIcon />
                 </IconButton>
@@ -90,9 +124,25 @@ class Header extends Component {
             </div>
             <div className={classes.sectionMobile}>
               <Toolbar className={classes.toolbarMain}>
+                <div className={classes.themeSwitch}>
+                  <Tooltip title={context.state.themeMode === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}>
+                    <Switch
+                      checked={context.state.themeMode === 'dark'}
+                      onChange={context.toggleThemeMode}
+                      classes={{
+                        switchBase: classes.switchBase,
+                        checked: classes.checked,
+                        track: classes.track,
+                      }}
+                      icon={<Brightness7Icon />}
+                      checkedIcon={<Brightness4Icon />}
+                    />
+                  </Tooltip>
+                </div>
+
                 <Typography variant="h5" color="inherit" align="right" noWrap
-                  className={classes.toolbarTitle}> NEWS GLANCE </Typography>    
-                
+                  className={classes.toolbarTitle}> NEWS GLANCE </Typography>
+
               </Toolbar>
             </div>
           </React.Fragment>

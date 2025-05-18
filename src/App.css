@@ -6,6 +6,46 @@ html{
 .App {
   /* Give app full page to work with */
   height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode styles */
+.dark-mode {
+  background-color: #303030;
+  color: #fff;
+}
+
+.dark-mode a {
+  color: #90caf9;
+}
+
+.dark-mode .MuiPaper-root {
+  background-color: #424242;
+}
+
+.dark-mode .MuiTypography-colorTextSecondary {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Light mode styles */
+.light-mode {
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.light-mode a {
+  color: #1976d2;
+}
+
+/* Common styles */
+.MuiCard-root {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-item-active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-weight: bold;
 }
 
 
@@ -24,6 +64,12 @@ html{
 /* Change color on hover */
 .bm-item:hover {
   color: white;
+}
+
+/* Active menu item */
+.menu-item-active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
 }
 
 /* Position and sizing of burger button */

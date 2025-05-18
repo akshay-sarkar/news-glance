@@ -7,6 +7,8 @@ class AppProvider  extends Component {
         age: 100,
         userData : null,
         countryEdition:'us',
+        themeMode: 'light', // Add theme mode state
+        refreshArticles: false, // Flag to trigger article refresh
         newsData: {
             Headlines: [],
             Business: [],
@@ -24,7 +26,7 @@ class AppProvider  extends Component {
             'Entertainment',
             'Science',
             'Health'
-        ]    
+        ]
     }
     render() {
         return (
@@ -36,15 +38,28 @@ class AppProvider  extends Component {
                     this.setState({ obj });
                 },
                 changeCountryEdition: (edition) => {
-                    this.setState({ countryEdition: edition });
-                    console.log('edition modified');
+                    this.setState({
+                        countryEdition: edition,
+                        refreshArticles: true // Set flag to trigger refresh
+                    });
+                    console.log('edition modified, refreshing articles');
+                },
+                toggleThemeMode: () => {
+                    this.setState(prevState => ({
+                        themeMode: prevState.themeMode === 'light' ? 'dark' : 'light'
+                    }));
+                    console.log('theme mode toggled');
+                },
+                resetRefreshArticles: () => {
+                    this.setState({ refreshArticles: false });
+                    console.log('refresh articles flag reset');
                 },
                 updateUserData: (user) => this.setState({
                     userData : user
                 })
             }}>
             {this.props.children}
-            
+
             </AppContext.Provider>
         )
     }
