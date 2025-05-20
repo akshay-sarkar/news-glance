@@ -32,9 +32,31 @@ const styles = theme => ({
     flexDirection: 'column',
     height: '100%',
   },
+  mediaContainer: {
+    height: 200,
+    position: 'relative',
+    backgroundColor: theme.palette.type === 'dark' ? '#424242' : '#f5f5f5',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
   media: {
     height: 200,
+    width: '100%',
     objectFit: 'cover',
+  },
+  noImagePlaceholder: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.palette.type === 'dark' ? '#424242' : '#f5f5f5',
+    color: theme.palette.text.secondary,
   },
   contentContainer: {
     display: 'flex',
@@ -51,7 +73,7 @@ const styles = theme => ({
   author: {
     textAlign: 'right',
     flex: 1,
-    fontSize: '0.75rem',
+    fontSize: '0.95rem',
     fontWeight: 500,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -61,7 +83,7 @@ const styles = theme => ({
   date: {
     textAlign: 'left',
     flex: 1,
-    fontSize: '0.75rem',
+    fontSize: '0.95rem',
     fontWeight: 500,
   },
   cardContent: {
@@ -100,9 +122,13 @@ const styles = theme => ({
 
 
 class NewsCard extends Component {
-  state = {
-    anchorEl: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      anchorEl: null,
+      imageError: false
+    };
+  }
 
   openUrl = (url) => {
     // route to new page by changing window.location
@@ -146,8 +172,13 @@ class NewsCard extends Component {
       });
   };
 
+  handleImageError = () => {
+    this.setState({ imageError: true });
+  }
+
   render() {
     const { article, classes } = this.props;
+    const { imageError } = this.state;
 
     // Format the date in a more readable way
     const formattedDate = article.publishedAt
@@ -164,17 +195,28 @@ class NewsCard extends Component {
           onClick={() => this.openUrl(article.url)}
           className={classes.cardActionArea}
         >
-          <CardMedia
-            component="img"
-            alt={article.title}
-            className={classes.media}
-            image={article.urlToImage || 'https://via.placeholder.com/300x200?text=No+Image'}
-            title={article.title}
-          />
+          <div className={classes.mediaContainer}>
+            {!imageError && article.urlToImage ? (
+              <CardMedia
+                component="img"
+                alt={article.title}
+                className={classes.media}
+                image={article.urlToImage}
+                title={article.title}
+                onError={this.handleImageError}
+              />
+            ) : (
+              <div className={classes.noImagePlaceholder}>
+                <Typography variant="body1">
+                  No Image Available
+                </Typography>
+              </div>
+            )}
+          </div>
 
           <div className={classes.contentContainer}>
             <div className={classes.metaInfo}>
-              <Typography variant="caption" className={classes.date}>
+              <Typography variant="body2" className={classes.date}>
                 {formattedDate}
               </Typography>
 
@@ -188,7 +230,7 @@ class NewsCard extends Component {
                 </IconButton>
               </Tooltip>
 
-              <Typography variant="caption" className={classes.author}>
+              <Typography variant="body2" className={classes.author}>
                 {article.author ? article.author : ''}
               </Typography>
             </div>
