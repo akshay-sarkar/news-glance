@@ -6,6 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import NewsCard from './NewsCard';
 import NewsCarousel from './NewsCarousel';
+import { getDummyDataForCategory } from '../util/dummyData';
 
 const styles = theme => ({
   root: {
@@ -58,6 +59,25 @@ const styles = theme => ({
   },
   carouselSection: {
     marginBottom: theme.spacing.unit * 3,
+  },
+  fallbackIndicator: {
+    backgroundColor: theme.palette.type === 'dark' ? 'rgba(255, 193, 7, 0.1)' : 'rgba(255, 193, 7, 0.1)',
+    border: `1px solid ${theme.palette.type === 'dark' ? '#ffb300' : '#ff8f00'}`,
+    borderRadius: '4px',
+    padding: theme.spacing.unit * 1.5,
+    marginBottom: theme.spacing.unit * 2,
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing.unit,
+  },
+  fallbackText: {
+    color: theme.palette.type === 'dark' ? '#ffb300' : '#ff8f00',
+    fontSize: '0.9rem',
+    fontWeight: 500,
+  },
+  fallbackIcon: {
+    color: theme.palette.type === 'dark' ? '#ffb300' : '#ff8f00',
+    fontSize: '1.2rem',
   }
 });
 
@@ -68,7 +88,8 @@ class Headlines extends Component {
     this.state = {
       newsData: [],
       isLoading: false,
-      currentPath: window.location.pathname // Store the current path
+      currentPath: window.location.pathname, // Store the current path
+      usingFallbackData: false // Track if we're using dummy data
     }
   }
 
@@ -145,21 +166,32 @@ class Headlines extends Component {
         console.log('API response:', data);
         this.setState({
           newsData: data.articles || [],
-          isLoading: true
+          isLoading: true,
+          usingFallbackData: false
         });
         console.log('Articles loaded for category:', category, 'Count:', data.articles?.length || 0);
       })
       .catch((error) => {
-        console.log("Error occurred while fetching data")
+        console.log("Error occurred while fetching data from NewsAPI (likely CORS issue on GitHub Pages)")
         console.log(error)
-        // Set loading to true but with empty data to show "No articles found"
-        this.setState({ newsData: [], isLoading: true });
+
+        // Use dummy data as fallback
+        console.log("Loading dummy data for category:", category);
+        const dummyData = getDummyDataForCategory(category);
+
+        this.setState({
+          newsData: dummyData.articles || [],
+          isLoading: true,
+          usingFallbackData: true
+        });
+
+        console.log("Loaded dummy articles for category:", category, "Count:", dummyData.articles?.length || 0);
       });
   }
 
   render() {
     const { classes } = this.props;
-    const { isLoading, newsData, currentPath } = this.state;
+    const { isLoading, newsData, currentPath, usingFallbackData } = this.state;
 
     // Extract category name from path for display
     let categoryName = 'Headlines';
@@ -172,6 +204,16 @@ class Headlines extends Component {
         <Typography variant="h4" className={classes.categoryTitle}>
           {categoryName}
         </Typography>
+
+        {/* Show fallback indicator when using dummy data */}
+        {usingFallbackData && (
+          <div className={classes.fallbackIndicator}>
+            <span className={classes.fallbackIcon}>⚠️</span>
+            <Typography className={classes.fallbackText}>
+              Demo Mode: Showing sample articles due to API limitations on GitHub Pages
+            </Typography>
+          </div>
+        )}
 
         {isLoading ? (
           <div>
