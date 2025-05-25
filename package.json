@@ -21,7 +21,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "deploy:manual": "./scripts/deploy.sh manual",
+    "deploy:ci-cd": "./scripts/deploy.sh ci-cd",
+    "test:ci": "react-scripts test --ci --watchAll=false --passWithNoTests",
+    "build:analyze": "npm run build && npx serve -s build"
   },
   "eslintConfig": {
     "extends": "react-app"
