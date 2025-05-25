@@ -1,0 +1,111 @@
+name: Promote to gh-pages
+
+# This workflow can be triggered manually to promote master branch to gh-pages
+on:
+  workflow_dispatch:
+    inputs:
+      source_branch:
+        description: 'Source branch to promote'
+        required: true
+        default: 'master'
+        type: choice
+        options:
+        - master
+        - main
+        - develop
+      commit_message:
+        description: 'Commit message for gh-pages'
+        required: false
+        default: 'Deploy from {source_branch}'
+
+# Environment variables
+env:
+  NODE_VERSION: '18.x'
+
+jobs:
+  promote:
+    name: Promote to gh-pages
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout source branch
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.inputs.source_branch }}
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests
+      run: npm test -- --ci --watchAll=false --passWithNoTests
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Configure Git
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        
+    - name: Create or update gh-pages branch
+      run: |
+        # Check if gh-pages branch exists
+        if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+          echo "gh-pages branch exists, checking it out..."
+          git checkout gh-pages
+          git pull origin gh-pages
+        else
+          echo "Creating new gh-pages branch..."
+          git checkout --orphan gh-pages
+          git rm -rf .
+        fi
+        
+    - name: Copy source files to gh-pages
+      run: |
+        # Get the source branch content
+        git checkout ${{ github.event.inputs.source_branch }} -- .
+        
+        # Remove build directory if it exists and recreate it
+        rm -rf build/
+        
+    - name: Reinstall dependencies and rebuild
+      run: |
+        npm ci
+        npm run build
+        
+    - name: Commit and push to gh-pages
+      run: |
+        # Add all files
+        git add .
+        
+        # Create commit message
+        COMMIT_MSG="${{ github.event.inputs.commit_message }}"
+        if [ "$COMMIT_MSG" = "Deploy from {source_branch}" ]; then
+          COMMIT_MSG="Deploy from ${{ github.event.inputs.source_branch }}"
+        fi
+        
+        # Check if there are changes to commit
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "$COMMIT_MSG - $(date '+%Y-%m-%d %H:%M:%S')"
+          git push origin gh-pages
+          echo "✅ Successfully promoted ${{ github.event.inputs.source_branch }} to gh-pages"
+        fi
+        
+    - name: Promotion Summary
+      run: |
+        echo "🚀 Promotion completed!"
+        echo "📝 Source: ${{ github.event.inputs.source_branch }}"
+        echo "🎯 Target: gh-pages"
+        echo "👤 Triggered by: ${{ github.actor }}"
+        echo ""
+        echo "The deployment workflow will now trigger automatically."

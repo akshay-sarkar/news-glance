@@ -1,0 +1,96 @@
+name: Test and Build
+
+# Trigger the workflow on push and pull requests to main branches
+on:
+  push:
+    branches: [ master, main, develop ]
+  pull_request:
+    branches: [ master, main ]
+
+# Allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+# Environment variables
+env:
+  NODE_VERSION: '18.x'
+
+jobs:
+  # Test job
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run ESLint (if configured)
+      run: |
+        if npm run lint --silent 2>/dev/null; then
+          npm run lint
+        else
+          echo "No lint script found, skipping..."
+        fi
+      continue-on-error: true
+      
+    - name: Run tests
+      run: npm test -- --coverage --ci --watchAll=false --passWithNoTests
+      
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      if: success()
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+      continue-on-error: true
+
+  # Build job
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-files-${{ github.sha }}
+        path: build/
+        retention-days: 7
+        
+    - name: Build Summary
+      run: |
+        echo "✅ Build completed successfully!"
+        echo "📝 Commit: ${{ github.sha }}"
+        echo "🌿 Branch: ${{ github.ref_name }}"
+        echo "👤 Author: ${{ github.actor }}"
+        echo ""
+        echo "To deploy this build:"
+        echo "1. Download the build artifacts"
+        echo "2. Push the changes to gh-pages branch"
+        echo "3. The deployment will trigger automatically"

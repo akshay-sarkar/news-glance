@@ -35,7 +35,7 @@ check_directory() {
         print_error "package.json not found. Please run this script from the project root directory."
         exit 1
     fi
-    
+
     if [ ! -d ".github/workflows" ]; then
         print_warning ".github/workflows directory not found. CI/CD may not be set up."
     fi
@@ -90,26 +90,66 @@ manual_deploy() {
     fi
 }
 
-# Function to trigger GitHub Actions deployment
+# Function to trigger GitHub Actions deployment via gh-pages
 trigger_ci_cd() {
     current_branch=$(git branch --show-current)
-    
-    if [ "$current_branch" != "master" ] && [ "$current_branch" != "main" ]; then
-        print_warning "You are on branch '$current_branch'. CI/CD deployment only triggers from master/main branch."
+
+    print_status "New deployment method: Promoting to gh-pages branch..."
+    print_status "This will trigger the deployment workflow automatically."
+
+    # Check if we're on a deployable branch
+    if [ "$current_branch" != "master" ] && [ "$current_branch" != "main" ] && [ "$current_branch" != "develop" ]; then
+        print_warning "You are on branch '$current_branch'."
         read -p "Do you want to switch to master branch? (y/N): " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             git checkout master
             git pull origin master
+            current_branch="master"
         else
-            print_error "Deployment cancelled. Please switch to master/main branch for CI/CD deployment."
+            print_error "Deployment cancelled. Please switch to master/main/develop branch."
             exit 1
         fi
     fi
-    
-    print_status "Pushing to $current_branch to trigger CI/CD..."
+
+    # Push current branch first
+    print_status "Pushing current branch ($current_branch)..."
     git push origin $current_branch
-    print_success "Push completed! CI/CD pipeline should start automatically."
+
+    # Promote to gh-pages
+    print_status "Promoting $current_branch to gh-pages..."
+
+    # Check if gh-pages branch exists
+    if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+        git checkout gh-pages
+        git pull origin gh-pages
+    else
+        print_status "Creating new gh-pages branch..."
+        git checkout --orphan gh-pages
+        git rm -rf .
+    fi
+
+    # Copy from source branch
+    git checkout $current_branch -- .
+
+    # Rebuild
+    npm ci
+    npm run build
+
+    # Commit and push
+    git add .
+    if git diff --staged --quiet; then
+        print_warning "No changes to deploy"
+    else
+        git commit -m "Deploy from $current_branch - $(date '+%Y-%m-%d %H:%M:%S')"
+        git push origin gh-pages
+        print_success "Successfully promoted $current_branch to gh-pages!"
+        print_status "Deployment workflow will trigger automatically."
+    fi
+
+    # Switch back to original branch
+    git checkout $current_branch
+
     print_status "Check the progress at: https://github.com/akshay-sarkar/news-glance/actions"
 }
 
@@ -121,11 +161,15 @@ show_help() {
     echo
     echo "Options:"
     echo "  manual    Deploy manually using gh-pages (npm run deploy)"
-    echo "  ci-cd     Push to master/main to trigger CI/CD pipeline"
+    echo "  ci-cd     Promote current branch to gh-pages and trigger deployment"
     echo "  test      Run tests only"
     echo "  build     Build the application only"
     echo "  help      Show this help message"
     echo
+    echo "Deployment Methods:"
+    echo "  - Manual: Uses npm run deploy (traditional gh-pages deployment)"
+    echo "  - CI/CD: Promotes code to gh-pages branch, triggers GitHub Actions"
+    echo ""
     echo "If no option is provided, you'll be prompted to choose."
 }
 
@@ -134,9 +178,9 @@ main() {
     echo "🚀 News Glance Deployment Script"
     echo "================================="
     echo
-    
+
     check_directory
-    
+
     case "${1:-}" in
         "manual")
             check_git_status
@@ -161,14 +205,14 @@ main() {
         "")
             # Interactive mode
             echo "Choose deployment method:"
-            echo "1) Manual deployment (gh-pages)"
-            echo "2) CI/CD deployment (push to master)"
+            echo "1) Manual deployment (npm run deploy)"
+            echo "2) CI/CD deployment (promote to gh-pages branch)"
             echo "3) Run tests only"
             echo "4) Build only"
             echo "5) Exit"
             echo
             read -p "Enter your choice (1-5): " choice
-            
+
             case $choice in
                 1)
                     check_git_status

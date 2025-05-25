@@ -1,45 +1,40 @@
 # CI/CD Setup for News Glance
 
-This document explains the GitHub Actions CI/CD pipeline setup for automatic deployment to GitHub Pages.
+This document explains the GitHub Actions CI/CD pipeline setup for deployment to GitHub Pages from the `gh-pages` branch.
 
 ## Overview
 
-The project now includes automated CI/CD workflows that will:
-- Run tests and linting on every push and pull request
-- Build the application
-- Deploy to GitHub Pages automatically when changes are pushed to the main/master branch
+The project uses a **branch-based deployment strategy** where:
+- Development happens on `master`, `main`, or `develop` branches
+- Tests and builds run automatically on pushes to development branches
+- Deployment only happens when code is promoted to the `gh-pages` branch
+- GitHub Pages serves content from the `gh-pages` branch
 
 ## Workflow Files
 
-### 1. `ci-cd.yml` (Recommended)
-**Location:** `.github/workflows/ci-cd.yml`
+### 1. `deploy-from-gh-pages.yml` (Main Deployment)
+**Location:** `.github/workflows/deploy-from-gh-pages.yml`
 
-This is the main CI/CD pipeline that includes:
-- **Test Stage:** Runs linting and tests
-- **Build Stage:** Creates production build
-- **Deploy Stage:** Deploys to GitHub Pages (only on master/main branch)
+This workflow deploys to GitHub Pages when code is pushed to the `gh-pages` branch:
+- **Triggers:** Push to `gh-pages` branch only
+- **Actions:** Tests → Build → Deploy to GitHub Pages
+- **Features:** Uses GitHub's native Pages deployment action
 
-**Features:**
-- Runs on Node.js 18.x
-- Caches npm dependencies for faster builds
-- Uploads test coverage reports
-- Only deploys from master/main branch
-- Uses GitHub's native Pages deployment action
+### 2. `test-and-build.yml` (Development)
+**Location:** `.github/workflows/test-and-build.yml`
 
-### 2. `deploy.yml` (Alternative)
-**Location:** `.github/workflows/deploy.yml`
+Runs on development branches for quality assurance:
+- **Triggers:** Push to `master`, `main`, `develop` branches and PRs
+- **Actions:** Tests → Build → Upload artifacts
+- **Features:** No deployment, only validation and artifact creation
 
-A simpler workflow focused on deployment:
-- Builds and deploys on every push to master/main
-- Uses GitHub's native Pages deployment
+### 3. `promote-to-gh-pages.yml` (Manual Promotion)
+**Location:** `.github/workflows/promote-to-gh-pages.yml`
 
-### 3. `deploy-gh-pages.yml` (Legacy)
-**Location:** `.github/workflows/deploy-gh-pages.yml`
-
-Uses the traditional gh-pages branch approach:
-- Similar to the manual `npm run deploy` command
-- Deploys to gh-pages branch
-- Good fallback option
+Manual workflow to promote code from development branches to `gh-pages`:
+- **Triggers:** Manual trigger only (workflow_dispatch)
+- **Actions:** Checkout source → Test → Build → Promote to gh-pages
+- **Features:** Allows controlled promotion of specific branches
 
 ## Setup Instructions
 
@@ -50,28 +45,29 @@ Uses the traditional gh-pages branch approach:
 
 ### Step 2: Configure GitHub Pages
 1. Go to repository Settings → Pages
-2. Set Source to "GitHub Actions" (recommended) or "Deploy from a branch" if using gh-pages workflow
-3. If using branch deployment, select "gh-pages" branch
+2. Set Source to "GitHub Actions"
+3. The deployment will be triggered by the `deploy-from-gh-pages.yml` workflow
 
 ### Step 3: Repository Secrets (if needed)
-No additional secrets are required for basic deployment. The workflows use the built-in `GITHUB_TOKEN`.
+No additional secrets are required. The workflows use the built-in `GITHUB_TOKEN`.
 
-### Step 4: Commit and Push
+### Step 4: Initial Setup
 ```bash
 git add .github/
-git commit -m "Add CI/CD workflows for GitHub Pages deployment"
+git commit -m "Add new CI/CD workflows for gh-pages deployment"
 git push origin master
 ```
 
 ## Workflow Triggers
 
 ### Automatic Triggers
-- **Push to master/main:** Triggers full CI/CD pipeline
-- **Pull Request:** Triggers testing and building (no deployment)
-- **Push to develop:** Triggers testing only
+- **Push to master/main/develop:** Triggers test and build (no deployment)
+- **Pull Request to master/main:** Triggers testing and building
+- **Push to gh-pages:** Triggers deployment to GitHub Pages
 
 ### Manual Triggers
-- Go to Actions tab → Select workflow → Click "Run workflow"
+- **Promote to gh-pages:** Go to Actions tab → "Promote to gh-pages" → "Run workflow"
+- **Manual deployment:** Use the deployment script: `./scripts/deploy.sh`
 
 ## Monitoring Deployments
 
@@ -108,13 +104,56 @@ git push origin master
 3. Test the build process manually: `npm run build`
 4. Check GitHub Pages settings in repository
 
-## Benefits of CI/CD
+## Deployment Methods
 
-1. **Automated Deployment:** No need to manually run `npm run deploy`
-2. **Quality Assurance:** Tests run before deployment
+### Method 1: Using the Deployment Script (Recommended)
+```bash
+# Interactive mode
+./scripts/deploy.sh
+
+# Direct CI/CD deployment
+./scripts/deploy.sh ci-cd
+
+# Or using npm script
+npm run deploy:ci-cd
+```
+
+### Method 2: Manual GitHub Actions
+1. Go to GitHub Actions tab
+2. Select "Promote to gh-pages" workflow
+3. Click "Run workflow"
+4. Choose source branch and commit message
+5. Click "Run workflow" button
+
+### Method 3: Manual Git Commands
+```bash
+# Switch to gh-pages branch
+git checkout gh-pages
+
+# Merge or copy from master
+git merge master  # or git checkout master -- .
+
+# Build and commit
+npm ci && npm run build
+git add .
+git commit -m "Deploy from master"
+git push origin gh-pages
+```
+
+### Method 4: Traditional gh-pages (Fallback)
+```bash
+# Traditional method (still works)
+npm run deploy
+```
+
+## Benefits of New CI/CD Setup
+
+1. **Controlled Deployment:** Only deploy when ready by promoting to gh-pages
+2. **Quality Assurance:** Tests run before deployment on all branches
 3. **Consistent Builds:** Same environment every time
-4. **Rollback Capability:** Easy to revert to previous versions
-5. **Team Collaboration:** All team members can contribute without deployment access
+4. **Rollback Capability:** Easy to revert gh-pages branch
+5. **Team Collaboration:** Clear separation between development and deployment
+6. **Flexibility:** Multiple deployment methods available
 
 ## Migration from Manual Deployment
 
