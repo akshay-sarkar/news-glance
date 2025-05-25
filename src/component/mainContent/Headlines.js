@@ -164,8 +164,9 @@ class Headlines extends Component {
       })
       .then(data => {
         console.log('API response:', data);
+        const dummyData = getDummyDataForCategory(category);
         this.setState({
-          newsData: data.articles || [],
+          newsData: dummyData.articles || [],
           isLoading: true,
           usingFallbackData: false
         });
