@@ -1,0 +1,51 @@
+name: Deploy to GitHub Pages (gh-pages branch)
+
+# Trigger the workflow on push to main/master branch
+on:
+  push:
+    branches: [ master, main ]
+
+# Allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        # Fetch full history for gh-pages deployment
+        fetch-depth: 0
+        
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests (if any)
+      run: npm test -- --coverage --ci --watchAll=false --passWithNoTests
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Configure Git
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        
+    - name: Deploy to gh-pages branch
+      run: |
+        npm install -g gh-pages
+        gh-pages -d build -u "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
