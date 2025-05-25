@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import NewsCard from './NewsCard';
+import NewsCarousel from './NewsCarousel';
 
 const styles = theme => ({
   root: {
@@ -48,6 +49,15 @@ const styles = theme => ({
   noArticlesMessage: {
     padding: theme.spacing.unit * 5,
     color: theme.palette.text.secondary,
+  },
+  remainingArticlesTitle: {
+    marginTop: theme.spacing.unit * 4,
+    marginBottom: theme.spacing.unit * 2,
+    color: theme.palette.text.primary,
+    fontWeight: 500,
+  },
+  carouselSection: {
+    marginBottom: theme.spacing.unit * 3,
   }
 });
 
@@ -166,28 +176,45 @@ class Headlines extends Component {
         {isLoading ? (
           <div>
             {newsData.length > 0 ? (
-              <Grid
-                container
-                spacing={24}
-                className={classes.gridContainer}
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="stretch"
-              >
-                {newsData.map(article => (
-                  <Grid
-                    item
-                    key={article.publishedAt || Math.random()}
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    className={classes.paper}
-                  >
-                    <NewsCard article={article} />
-                  </Grid>
-                ))}
-              </Grid>
+              <div>
+                {/* Carousel for first 5 articles */}
+                {newsData.length > 0 && (
+                  <div className={classes.carouselSection}>
+                    <NewsCarousel articles={newsData.slice(0, 5)} />
+                  </div>
+                )}
+
+                {/* Remaining articles as NewsCards */}
+                {newsData.length > 5 && (
+                  <div>
+                    <Typography variant="h5" className={classes.remainingArticlesTitle}>
+                      More Stories
+                    </Typography>
+                    <Grid
+                      container
+                      spacing={24}
+                      className={classes.gridContainer}
+                      direction="row"
+                      justifyContent="flex-start"
+                      alignItems="stretch"
+                    >
+                      {newsData.slice(5).map(article => (
+                        <Grid
+                          item
+                          key={article.publishedAt || Math.random()}
+                          xs={12}
+                          sm={6}
+                          md={4}
+                          lg={3}
+                          className={classes.paper}
+                        >
+                          <NewsCard article={article} />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </div>
+                )}
+              </div>
             ) : (
               <div className={classes.loadingContainer}>
                 <Typography variant="h5" align="center" className={classes.noArticlesMessage}>
