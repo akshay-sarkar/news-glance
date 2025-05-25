@@ -15,10 +15,6 @@ html{
   color: #fff;
 }
 
-.dark-mode a {
-  color: #90caf9;
-}
-
 .dark-mode .MuiPaper-root {
   background-color: #424242;
 }
@@ -27,14 +23,22 @@ html{
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* Dark mode active menu items */
+.dark-mode .menu-item-active {
+  background-color: rgba(144, 202, 249, 0.2);
+  border-left: 3px solid #90caf9;
+}
+
 /* Light mode styles */
 .light-mode {
   background-color: #fff;
   color: rgba(0, 0, 0, 0.87);
 }
 
-.light-mode a {
-  color: #1976d2;
+/* Light mode active menu items */
+.light-mode .menu-item-active {
+  background-color: rgba(25, 118, 210, 0.1);
+  border-left: 3px solid #1976d2;
 }
 
 /* Common styles */
@@ -42,10 +46,29 @@ html{
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Base menu item active styles */
 .menu-item-active {
-  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   font-weight: bold;
+  transition: all 0.3s ease;
+  padding-left: 12px !important;
+  position: relative;
+}
+
+/* Ensure active links are visible in burger menu */
+.bm-menu .menu-item-active {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-left: 3px solid #90caf9 !important;
+}
+
+/* Active link indicator for desktop menu */
+.MuiToolbar-root .menu-item-active {
+  position: relative;
+}
+
+/* Improve contrast for active links */
+.menu-item-active .MuiTypography-root {
+  font-weight: 600 !important;
 }
 
 
@@ -64,12 +87,6 @@ html{
 /* Change color on hover */
 .bm-item:hover {
   color: white;
-}
-
-/* Active menu item */
-.menu-item-active {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
 }
 
 /* Position and sizing of burger button */

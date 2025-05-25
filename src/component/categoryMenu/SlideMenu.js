@@ -66,8 +66,24 @@ class SlideMenu extends Component {
                         className={({ isActive }) =>
                           isActive ? "menu-item menu-item-active" : "menu-item"
                         }
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          textDecoration: 'none',
+                          padding: '8px 16px',
+                          borderRadius: '4px',
+                          transition: 'all 0.3s ease',
+                        }}
                       >
-                        <Typography style={{ color: '#FFFFFF', fontSize: '1em' }}>{section}</Typography>
+                        <Typography
+                          style={{
+                            color: '#FFFFFF',
+                            fontSize: '1em',
+                            fontWeight: 'inherit'
+                          }}
+                        >
+                          {section}
+                        </Typography>
                       </NavLink>
                     </ListItem>
                   ))}

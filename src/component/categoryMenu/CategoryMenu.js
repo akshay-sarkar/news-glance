@@ -12,18 +12,41 @@ const style = theme => ({
         textDecoration: 'none',
         color: theme.palette.text.primary,
         margin: '0 10px',
-        padding: '5px 10px',
-        borderRadius: '4px',
-        transition: 'background-color 0.3s ease',
+        padding: '8px 16px',
+        borderRadius: '20px',
+        transition: 'all 0.3s ease',
+        fontWeight: 500,
+        fontSize: '0.95rem',
+        position: 'relative',
         '&:hover': {
             backgroundColor: theme.palette.action.hover,
+            transform: 'translateY(-1px)',
         }
     },
     activeLink: {
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.primary.contrastText,
+        fontWeight: 600,
+        boxShadow: theme.palette.type === 'dark'
+            ? '0 2px 8px rgba(144, 202, 249, 0.3)'
+            : '0 2px 8px rgba(25, 118, 210, 0.3)',
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
+            transform: 'translateY(-1px)',
+            boxShadow: theme.palette.type === 'dark'
+                ? '0 4px 12px rgba(144, 202, 249, 0.4)'
+                : '0 4px 12px rgba(25, 118, 210, 0.4)',
+        },
+        '&::before': {
+            content: '""',
+            position: 'absolute',
+            bottom: '-2px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '6px',
+            height: '6px',
+            borderRadius: '50%',
+            backgroundColor: theme.palette.primary.contrastText,
         }
     },
     root: {
