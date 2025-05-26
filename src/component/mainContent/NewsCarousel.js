@@ -315,7 +315,7 @@ class NewsCarousel extends Component {
         >
           {articles.map((article, index) => (
             <div
-              key={article.publishedAt || index}
+              key={article.publishedAt+index}
               className={classes.carouselSlide}
               onClick={() => this.handleSlideClick(article)}
             >

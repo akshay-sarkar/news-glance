@@ -12,6 +12,7 @@ import { AppProvider } from './component/util/AppContext';
 import { AppContext } from './component/util/AppContext';
 import Headlines from './component/mainContent/Headlines';
 import CategoryMenu from './component/categoryMenu/CategoryMenu';
+import Footer from './component/footer/Footer';
 
 // Create theme based on mode
 const getTheme = (mode) => createTheme({
@@ -89,6 +90,7 @@ class App extends Component {
                             ))}
                             <Route path="*" element={<Headlines context={context} />} />
                           </Routes>
+                          <Footer/>
                         </div>
                       </>
                     </Router>

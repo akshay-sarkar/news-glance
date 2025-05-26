@@ -164,9 +164,8 @@ class Headlines extends Component {
       })
       .then(data => {
         console.log('API response:', data);
-        const dummyData = getDummyDataForCategory(category);
         this.setState({
-          newsData: dummyData.articles || [],
+          newsData: data.articles || [],
           isLoading: true,
           usingFallbackData: false
         });
@@ -244,7 +243,7 @@ class Headlines extends Component {
                       {newsData.slice(5).map(article => (
                         <Grid
                           item
-                          key={article.publishedAt || Math.random()}
+                          key={article.publishedAt+Math.random()}
                           xs={12}
                           sm={6}
                           md={4}
